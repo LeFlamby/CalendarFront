@@ -76,7 +76,6 @@ export class HomeComponent implements OnInit {
       options.weekends = !options.weekends;
     });
   }
-
   handleDateSelect(selectInfo: DateSelectArg) {
     const title = prompt('Please enter a new title for your event');
     const description = prompt('Please enter a new description for your event');
