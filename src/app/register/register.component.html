@@ -1,0 +1,39 @@
+<p>register works!</p>
+<div class="register">
+
+    <H1>Créer un compte</H1>
+    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+        <label for="username"></label>
+        <input
+        type="text"
+        id="username"
+        name="username"
+        formControlName="username"
+        required
+        placeholder="Nom d'utilisateur"
+        />
+
+        <label for="password">Mot de passe</label>
+        <input
+        type="password"
+        id="password"
+        name="password"
+        formControlName="password"
+        placeholder="Mot de passe"
+        >
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input
+        type="password"
+        id="confirmPassword"
+        name="confirmPassword"
+        formControlName="confirmPassword"
+        placeholder="Mot de passe"
+        >
+
+        <div class="error"*ngIf="registerForm.invalid && this.isTyping === true">Les mots de passe ne correspondent pas.</div>
+
+        <button type="submit" [disabled]="registerForm.invalid">Créez votre compte</button>
+
+    </form>
+
+</div>
