@@ -10,6 +10,7 @@ import frLocale from '@fullcalendar/core/locales/fr';
 })
 export class CalendarUtilService {
 
+
   calendarOptions = {
     plugins: [
       interactionPlugin,
@@ -31,6 +32,7 @@ export class CalendarUtilService {
     dayMaxEvents: true,
   };
 
-
   constructor() { }
+
 }
+

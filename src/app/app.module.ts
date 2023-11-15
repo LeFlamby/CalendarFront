@@ -8,13 +8,13 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ApiService } from './api.service'; 
-import { LoginComponent } from './login/login.component';
+import { ApiService } from './services/api.service'; 
+import { LoginComponent } from './components/login/login.component';
 
-import { HeaderInterceptor } from './header.interceptor';
+import { HttpApiInterceptor } from './core/interceptors/http-api.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
+import { HomeComponent } from './components/home/home.component';
+import { RegisterComponent } from './components/register/register.component';
 
 
 @NgModule({
@@ -37,7 +37,7 @@ import { RegisterComponent } from './register/register.component';
     ApiService,
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: HeaderInterceptor,
+      useClass: HttpApiInterceptor,
       multi: true,
     },
   ],

@@ -4,14 +4,11 @@ import {
   DateSelectArg,
   EventClickArg,
   EventApi,
-  Calendar,
-  EventDropArg,
+  CalendarApi,
 } from '@fullcalendar/core';
-import { INITIAL_EVENTS, createEventId } from './event-utils';
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../services/api.service';
 import { map, tap } from 'rxjs';
-import { CalendarUtilService } from '../services/utils/calendar-util.service';
+import { CalendarUtilService } from '../../services/utils/calendar-util.service';
 
 @Component({
   selector: 'app-home',
@@ -28,9 +25,15 @@ export class HomeComponent implements OnInit {
     private api: ApiService,
     private calendarUtil: CalendarUtilService,
     private changeDetector: ChangeDetectorRef
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.setCalendar();
+    this.getDatas();
+  }
+
+
+  setCalendar(): void {
     this.calendarOptions.set({
       ...this.calendarUtil.calendarOptions,
       select: this.handleDateSelect.bind(this),
@@ -38,7 +41,10 @@ export class HomeComponent implements OnInit {
       eventsSet: this.handleEvents.bind(this),
       eventDrop: this.handleEventDrop.bind(this),
     });
+  }
 
+
+  getDatas(): void {
     this.api
       .get('/event')
       .pipe(
@@ -76,33 +82,39 @@ export class HomeComponent implements OnInit {
       options.weekends = !options.weekends;
     });
   }
+
   handleDateSelect(selectInfo: DateSelectArg) {
     const title = prompt('Please enter a new title for your event');
     const description = prompt('Please enter a new description for your event');
     const calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
+    calendarApi.unselect();
 
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
+    if (title && description) {
+      this.persistEventThenAddToDom(title, description, selectInfo, calendarApi);
+    }
+  }
+
+  persistEventThenAddToDom(title: string, description: string, selectInfo: DateSelectArg, calendarApi: CalendarApi): void {
+    this.api
+      .post('/event', {
+        title: title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         description,
-        allDay: selectInfo.allDay,
-      });
-      this.api
-        .post('/event', {
-          title: title,
+      })
+      .subscribe((data) => {
+        console.log(data);
+
+        calendarApi.addEvent({
+          id: data.id,
+          title,
           start: selectInfo.startStr,
           end: selectInfo.endStr,
           description,
-        })
-        .subscribe((data) => {
-          console.log(data);
+          allDay: selectInfo.allDay,
         });
-    }
+      });
   }
 
   handleEventClick(clickInfo: EventClickArg) {
@@ -118,43 +130,25 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  handleEvents(events: EventApi[]) {    
+  handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
-    this.changeDetector.detectChanges(); // workaround for pressionChangedAfterItHasBeenCheckedError
-    // if (this.isDataFirstFetched && events) {
-    //   this.api.put('/event', events).subscribe((data) => {
-    //     console.log(data);
-    //   });
-    // }
+    this.changeDetector.detectChanges();
   }
+
   handleEventDrop(info: { event: EventApi; oldEvent: EventApi }) {
     const updatedEvent = {
       id: info.event.id,
       start: info.event.start,
       end: info.event.end,
       title: info.event.title,
-    //  description: info.event.description,
+      //  description: info.event.description,
     };
 
     this.api.put('/event/' + info.event.id, updatedEvent).subscribe((data) => {
       console.log(data);
-    }
-    );
+    });
+
   }
 
-  // handleEventDrop(arg: EventDropArg) {
-  //   const updatedEvent = {
-  //     id: arg.event.id,
-  //     start: arg.event.start,
-  //     end: arg.event.end,
-  //     title: arg.event.title,
-  //     // description: arg.event.extendedProps?.description,
-  //   };
-
-  //   this.api.put('/event/' + arg.event.id, updatedEvent).subscribe((data) => {
-  //     console.log(data);
-  //   }
-  //   );
-  // }
 }
 
