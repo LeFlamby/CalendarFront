@@ -9,6 +9,7 @@ import {
 import { ApiService } from '../../services/api.service';
 import { map, tap } from 'rxjs';
 import { CalendarUtilService } from '../../services/utils/calendar-util.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
   selector: 'app-home',
@@ -30,6 +31,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.setCalendar();
     this.getDatas();
+    this.getUserId();
   }
 
 
@@ -40,6 +42,7 @@ export class HomeComponent implements OnInit {
       eventClick: this.handleEventClick.bind(this),
       eventsSet: this.handleEvents.bind(this),
       eventDrop: this.handleEventDrop.bind(this),
+      timeZone:'Europe/Paris'
     });
   }
 
@@ -96,26 +99,34 @@ export class HomeComponent implements OnInit {
   }
 
   persistEventThenAddToDom(title: string, description: string, selectInfo: DateSelectArg, calendarApi: CalendarApi): void {
+    const users_id = this.getUserId();
+    console.log(users_id);
     this.api
       .post('/event', {
         title: title,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
-        description,
+        description
       })
       .subscribe((data) => {
-        console.log(data);
-
-        calendarApi.addEvent({
-          id: data.id,
-          title,
-          start: selectInfo.startStr,
-          end: selectInfo.endStr,
-          description,
-          allDay: selectInfo.allDay,
+        this.api.post(`/bind/${data.id}/user/${users_id}`, data)
+        .subscribe((data) => {
+          console.log(data);
+          calendarApi.addEvent({
+            id: data.id,
+            title,
+            start: selectInfo.startStr,
+            end: selectInfo.endStr,
+            description,
+            allDay: selectInfo.allDay,
+          });
         });
+      
       });
   }
+  
+  
+  
 
   handleEventClick(clickInfo: EventClickArg) {
     if (
@@ -150,5 +161,22 @@ export class HomeComponent implements OnInit {
 
   }
 
+  getUserId(): any{
+
+  const token = localStorage.getItem('token');
+
+  if (token ) {
+    const jwtHelper = new JwtHelperService();
+  
+    const tokenData = jwtHelper.decodeToken(token);
+
+    const userId = tokenData.id;
+
+    console.log(userId);
+    return userId;
+  
+  
+  }
 }
 
+}
