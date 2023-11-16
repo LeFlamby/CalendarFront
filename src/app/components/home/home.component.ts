@@ -7,7 +7,7 @@ import {
   CalendarApi,
 } from '@fullcalendar/core';
 import { ApiService } from '../../services/api.service';
-import { map, tap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 import { CalendarUtilService } from '../../services/utils/calendar-util.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -42,7 +42,7 @@ export class HomeComponent implements OnInit {
       eventClick: this.handleEventClick.bind(this),
       eventsSet: this.handleEvents.bind(this),
       eventDrop: this.handleEventDrop.bind(this),
-      timeZone:'Europe/Paris'
+      timeZone: 'Europe/Paris'
     });
   }
 
@@ -108,25 +108,26 @@ export class HomeComponent implements OnInit {
         end: selectInfo.endStr,
         description
       })
-      .subscribe((data) => {
-        this.api.post(`/bind/${data.id}/user/${users_id}`, data)
-        .subscribe((data) => {
-          console.log(data);
-          calendarApi.addEvent({
-            id: data.id,
-            title,
-            start: selectInfo.startStr,
-            end: selectInfo.endStr,
-            description,
-            allDay: selectInfo.allDay,
-          });
+      .pipe(
+        switchMap((dataFromPostEvent: any) => this.api.post(`/bind/${dataFromPostEvent.id}/user/${users_id}`, dataFromPostEvent))
+      )
+      .subscribe((dataFromBind) => {
+        console.log(dataFromBind);
+        calendarApi.addEvent({
+          id: dataFromBind.id,
+          title,
+          start: selectInfo.startStr,
+          end: selectInfo.endStr,
+          description,
+          allDay: selectInfo.allDay,
         });
-      
       });
+
+
   }
-  
-  
-  
+
+
+
 
   handleEventClick(clickInfo: EventClickArg) {
     if (
@@ -161,22 +162,22 @@ export class HomeComponent implements OnInit {
 
   }
 
-  getUserId(): any{
+  getUserId(): any {
 
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  if (token ) {
-    const jwtHelper = new JwtHelperService();
-  
-    const tokenData = jwtHelper.decodeToken(token);
+    if (token) {
+      const jwtHelper = new JwtHelperService();
 
-    const userId = tokenData.id;
+      const tokenData = jwtHelper.decodeToken(token);
 
-    console.log(userId);
-    return userId;
-  
-  
+      const userId = tokenData.id;
+
+      console.log(userId);
+      return userId;
+
+
+    }
   }
-}
 
 }
