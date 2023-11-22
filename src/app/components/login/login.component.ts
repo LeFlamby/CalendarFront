@@ -3,6 +3,13 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+
+
+
 
 
 
@@ -45,11 +52,15 @@ export class LoginComponent implements OnInit {
       this.auth.login(username, password).subscribe((data: any) => {
         this.loginData = data;
         alert("Vous êtes connecté!");
-        this.router.navigate(['/home']);
+        this.router.navigate(['/calendar']);
       });
     } else {
       alert("Identifiant ou mot de passe incorrect");
     }
+  }
+
+  navigateTo(path: string) {
+    this.router.navigate([path]);
   }
 
   signOut() {

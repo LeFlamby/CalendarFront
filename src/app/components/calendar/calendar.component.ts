@@ -7,16 +7,16 @@ import {
   CalendarApi,
 } from '@fullcalendar/core';
 import { ApiService } from '../../services/api.service';
-import { map, tap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 import { CalendarUtilService } from '../../services/utils/calendar-util.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  selector: 'app-calendar',
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class CalendarComponent implements OnInit {
   calendarVisible = signal(true);
   calendarOptions = signal<CalendarOptions>({});
   currentEvents = signal<EventApi[]>([]);
@@ -38,18 +38,29 @@ export class HomeComponent implements OnInit {
   setCalendar(): void {
     this.calendarOptions.set({
       ...this.calendarUtil.calendarOptions,
+      initialView: 'dayGridMonth',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridDay',
+      },
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventsSet: this.handleEvents.bind(this),
       eventDrop: this.handleEventDrop.bind(this),
-      timeZone:'Europe/Paris'
+      // selectable: true,
+      // selectMirror: true,
+      timeZone:'Europe/Paris',
+      selectLongPressDelay: 100,
+
+
     });
   }
 
 
   getDatas(): void {
     this.api
-      .get('/event')
+      .get('/event/user/' + this.getUserId())
       .pipe(
         tap((data) => console.log(data)),
         map((data: any[]) =>
@@ -90,9 +101,9 @@ export class HomeComponent implements OnInit {
     const title = prompt('Please enter a new title for your event');
     const description = prompt('Please enter a new description for your event');
     const calendarApi = selectInfo.view.calendar;
-
+  
     calendarApi.unselect();
-
+  
     if (title && description) {
       this.persistEventThenAddToDom(title, description, selectInfo, calendarApi);
     }
@@ -100,7 +111,6 @@ export class HomeComponent implements OnInit {
 
   persistEventThenAddToDom(title: string, description: string, selectInfo: DateSelectArg, calendarApi: CalendarApi): void {
     const users_id = this.getUserId();
-    console.log(users_id);
     this.api
       .post('/event', {
         title: title,
@@ -108,8 +118,10 @@ export class HomeComponent implements OnInit {
         end: selectInfo.endStr,
         description
       })
-      .subscribe((data) => {
-        this.api.post(`/bind/${data.id}/user/${users_id}`, data)
+    
+      .pipe(
+        switchMap((data) => this.api.post(`/bind/${data.id}/user/${users_id}`, data))
+      )
         .subscribe((data) => {
           console.log(data);
           calendarApi.addEvent({
@@ -120,22 +132,24 @@ export class HomeComponent implements OnInit {
             description,
             allDay: selectInfo.allDay,
           });
+     
         });
       
-      });
-  }
+      };
   
+
   
   
 
   handleEventClick(clickInfo: EventClickArg) {
+    const users_id = this.getUserId();
     if (
       confirm(
         `Are you sure you want to delete the event '${clickInfo.event.title}'`
       )
     ) {
       clickInfo.event.remove();
-      this.api.delete('/event/' + clickInfo.event.id).subscribe((data) => {
+      this.api.delete(`/bind/${clickInfo.event.id}/user/${users_id}` ).subscribe((data) => {
         console.log(data);
       });
     }
@@ -172,7 +186,6 @@ export class HomeComponent implements OnInit {
 
     const userId = tokenData.id;
 
-    console.log(userId);
     return userId;
   
   

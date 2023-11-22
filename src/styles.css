@@ -1,1 +1,19 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css"; 
+@import 'primeflex/primeflex.css';
+
+
+
+.fc-dayGridMonth-view {
+    width: 90vw;
+    height: 70vh;
+       }
+
+       .fc-direction-ltr .fc-toolbar > * > :not(:first-child) {
+        margin-left: 0;
+
+       
+    }
+    .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
+        height: 80vh;
+    }

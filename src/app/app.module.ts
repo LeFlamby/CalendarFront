@@ -13,16 +13,26 @@ import { LoginComponent } from './components/login/login.component';
 
 import { HttpApiInterceptor } from './core/interceptors/http-api.interceptor';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HomeComponent } from './components/home/home.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 import { RegisterComponent } from './components/register/register.component';
+import { PasswordModule } from 'primeng/password';
+import { DividerModule } from 'primeng/divider';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+
+
+
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent,
-    RegisterComponent
+    CalendarComponent,
+    RegisterComponent,
+  
   ],
   imports: [
     BrowserModule,
@@ -31,7 +41,13 @@ import { RegisterComponent } from './components/register/register.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    PasswordModule,
+    DividerModule,
+    BrowserAnimationsModule,
+    ButtonModule,
+    InputTextModule,
     
+
   ],
   providers: [
     ApiService,

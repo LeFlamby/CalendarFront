@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validator, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import {Router} from '@angular/router'
+import { DividerModule } from 'primeng/divider';
 
 
 @Component({
@@ -17,11 +18,14 @@ export class RegisterComponent {
 
   constructor( private formBuilder: FormBuilder, private auth: AuthService, private router: Router){
     this.registerForm = this.formBuilder.group({
-      username:  Validators.required,
-      password: [Validators.required, Validators.minLength(8)], //regex en + ?
-      confirmPassword: [Validators.required, Validators.minLength(8)],
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
     }, {
       validators: [this.passwordMatchesValidator]
+    });
+    this.registerForm.get('confirmPassword')?.valueChanges.subscribe(() => {
+      this.isTyping = true;
     });
   }
 
@@ -50,6 +54,6 @@ export class RegisterComponent {
       });
     }
   }
-  }
+}
 
 

@@ -1,39 +1,52 @@
-<p>register works!</p>
-<div class="register">
+<div class="w-full mt-5 flex flex-column align-items-center justify-content-center">
 
-    <H1>Créer un compte</H1>
-    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
-        <label for="username"></label>
+    <H1 class="mb-5">Créer un compte</H1>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="w-full flex flex-column align-items-center justify-content-center gap-5">
+
+        <span class="p-float-label">        
         <input
+        pInputText
         type="text"
         id="username"
         name="username"
+        class="p-inputtext-lg"
         formControlName="username"
         required
-        placeholder="Nom d'utilisateur"
         />
+        <label class="w-9rem" htmlFor="username">Nom d'utilisateur</label>
+        </span>
 
-        <label for="password">Mot de passe</label>
-        <input
-        type="password"
-        id="password"
-        name="password"
-        formControlName="password"
-        placeholder="Mot de passe"
-        >
-        <label for="confirmPassword">Confirmer le mot de passe</label>
-        <input
-        type="password"
-        id="confirmPassword"
-        name="confirmPassword"
-        formControlName="confirmPassword"
-        placeholder="Mot de passe"
-        >
-
-        <div class="error"*ngIf="registerForm.invalid && this.isTyping === true">Les mots de passe ne correspondent pas.</div>
-
-        <button type="submit" [disabled]="registerForm.invalid">Créez votre compte</button>
-
+        <span class="p-float-label">        
+            <p-password [toggleMask]="true" formControlName="password" class="p-inputtext-lg">
+            <ng-template pTemplate="header">
+                <h6>Pick a password</h6>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <p-divider></p-divider>
+                <p class="mt-2">Suggestions</p>
+                <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                    <li>Au moins une minuscule</li>
+                    <li>Au moins une majuscule</li>
+                    <li>Au moins un chiffre</li>
+                    <li>Minimum 8 charactères</li>
+                </ul>
+            </ng-template>
+        </p-password>
+        <label class="w-9rem" htmlFor="password" >Mot de passe</label>
+    </span>
+      
+    <span class="p-float-label">        
+        <p-password [toggleMask]="true" formControlName="confirmPassword" [feedback]="false" class="p-inputtext-lg">
+        
+    </p-password>
+    <label class="w-50rem" htmlFor="confirmPassword" *ngIf="!this.isTyping">Confirmer votre mot de passe</label>
+<label class="w-50rem text-xs " htmlFor="confirmPassword" *ngIf="registerForm.invalid && this.isTyping">Les mots de passe ne correspondent pas.</label>
+</span>
+        
+        <p-button type="submit" [disabled]="registerForm.invalid" icon="pi pi-user-plus" styleClass="p-button-success w-10rem"  >Créez votre compte</p-button>
     </form>
+
+    <p class="mt-6">Vous avez déjà un compte ? <a href="/login">Connectez-vous</a></p>
 
 </div>
