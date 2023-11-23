@@ -10,6 +10,7 @@ import { CalendarUtilService } from 'src/app/services/utils/calendar-util.servic
 })
 export class HeaderComponent {
 items: MenuItem[]|undefined;
+sidebarVisible : boolean = false;
 
 ngOnInit() {
   

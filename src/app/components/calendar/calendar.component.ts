@@ -36,9 +36,18 @@ export class CalendarComponent implements OnInit {
     this.getUserId();
 
     this.calendarUtil.changeView$.subscribe((view) => {
-      console.log(`Changing to view: ${view}`);
+   this.calendarOptions.update((options) => {
+    return {
+      
+      ...options,
+      headerToolbar: {
+        right: view,
+    },
   }
 
+  }
+  );
+  }
   );
   }
   
