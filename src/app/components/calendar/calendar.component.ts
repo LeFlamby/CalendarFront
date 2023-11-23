@@ -1,22 +1,27 @@
-import { Component, signal, ChangeDetectorRef, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, signal, ChangeDetectorRef, OnInit, Input, Output, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
 import {
   CalendarOptions,
   DateSelectArg,
   EventClickArg,
   EventApi,
   CalendarApi,
+  Calendar,
 } from '@fullcalendar/core';
 import { ApiService } from '../../services/api.service';
 import { map, switchMap, tap } from 'rxjs';
 import { CalendarUtilService } from '../../services/utils/calendar-util.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { FullCalendarComponent } from '@fullcalendar/angular';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css'],
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('fullCalendarRef') fullCalendarRef!: FullCalendarComponent;
+
   calendarVisible = signal(true);
   calendarOptions = signal<CalendarOptions>({});
   currentEvents = signal<EventApi[]>([]);
@@ -34,23 +39,13 @@ export class CalendarComponent implements OnInit {
     this.setCalendar();
     this.getDatas();
     this.getUserId();
-
-    this.calendarUtil.changeView$.subscribe((view) => {
-   this.calendarOptions.update((options) => {
-    return {
-      
-      ...options,
-      headerToolbar: {
-        right: view,
-    },
   }
 
+  ngAfterViewInit(): void {
+    this.calendarUtil.changeView$.subscribe((view) => {      
+      this.fullCalendarRef.getApi().changeView(view);
+    });
   }
-  );
-  }
-  );
-  }
-  
 
   setCalendar(): void {
     this.calendarOptions.set({
@@ -61,7 +56,7 @@ export class CalendarComponent implements OnInit {
       eventDrop: this.handleEventDrop.bind(this),
       // selectable: true,
       // selectMirror: true,
-      timeZone:'Europe/Paris',
+      timeZone: 'Europe/Paris',
       selectLongPressDelay: 100,
 
     });
@@ -101,9 +96,9 @@ export class CalendarComponent implements OnInit {
     const title = prompt('Please enter a new title for your event');
     const description = prompt('Please enter a new description for your event');
     const calendarApi = selectInfo.view.calendar;
-  
+
     calendarApi.unselect();
-  
+
     if (title && description) {
       this.persistEventThenAddToDom(title, description, selectInfo, calendarApi);
     }
@@ -118,28 +113,28 @@ export class CalendarComponent implements OnInit {
         end: selectInfo.endStr,
         description
       })
-    
+
       .pipe(
         switchMap((data) => this.api.post(`/bind/${data.id}/user/${users_id}`, data))
       )
-        .subscribe((data) => {
-          console.log(data);
-          calendarApi.addEvent({
-            id: data.id,
-            title,
-            start: selectInfo.startStr,
-            end: selectInfo.endStr,
-            description,
-            allDay: selectInfo.allDay,
-          });
-     
+      .subscribe((data) => {
+        console.log(data);
+        calendarApi.addEvent({
+          id: data.id,
+          title,
+          start: selectInfo.startStr,
+          end: selectInfo.endStr,
+          description,
+          allDay: selectInfo.allDay,
         });
-      
-      };
-  
 
-  
-  
+      });
+
+  };
+
+
+
+
 
   handleEventClick(clickInfo: EventClickArg) {
     const users_id = this.getUserId();
@@ -149,7 +144,7 @@ export class CalendarComponent implements OnInit {
       )
     ) {
       clickInfo.event.remove();
-      this.api.delete(`/bind/${clickInfo.event.id}/user/${users_id}` ).subscribe((data) => {
+      this.api.delete(`/bind/${clickInfo.event.id}/user/${users_id}`).subscribe((data) => {
         console.log(data);
       });
     }
@@ -176,20 +171,20 @@ export class CalendarComponent implements OnInit {
 
   }
 
-  getUserId(): any{
+  getUserId(): any {
 
-  const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
 
-  if (token ) {
-    const jwtHelper = new JwtHelperService();
-  
-    const tokenData = jwtHelper.decodeToken(token);
+    if (token) {
+      const jwtHelper = new JwtHelperService();
 
-    const userId = tokenData.id;
+      const tokenData = jwtHelper.decodeToken(token);
 
-    return userId;
+      const userId = tokenData.id;
+
+      return userId;
+    }
   }
-}
 
 
 }

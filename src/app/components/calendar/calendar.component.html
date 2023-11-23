@@ -1,7 +1,7 @@
 <app-header></app-header>
 
-    <div class='demo-app-main'>
-      <full-calendar *ngIf='calendarVisible()' [options]='calendarOptions()' >
+    <div class="demo-app-main">
+      <full-calendar *ngIf="calendarVisible()" [options]="calendarOptions()" #fullCalendarRef>
         <ng-template #eventContent let-arg>
           <b>{{ arg.timeText }}</b>
           <i>{{ arg.event.title }}</i>

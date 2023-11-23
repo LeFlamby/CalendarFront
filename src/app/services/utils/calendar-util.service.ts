@@ -5,6 +5,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import frLocale from '@fullcalendar/core/locales/fr';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { filter } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,10 @@ export class CalendarUtilService {
   calendarOptions$ = this.calendarOptionsSource.asObservable();
 
   private changeViewSource = new BehaviorSubject<string>('');
-  changeView$ = this.changeViewSource.asObservable();
+  changeView$ = this.changeViewSource.asObservable()
+    .pipe(
+      filter(v => v != '')
+    );
 
 
   calendarOptions = {
@@ -26,11 +30,11 @@ export class CalendarUtilService {
       listPlugin,
     ],
     locale: frLocale,
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek'  //,timeGridDay,listWeek'
-    },
+    // headerToolbar: {
+    //   left: 'prev,next today',
+    //   center: 'title',
+    //   right: 'dayGridMonth,timeGridWeek'  //,timeGridDay,listWeek'
+    // },
     initialView: 'dayGridMonth',
     weekends: true,
     editable: true,
