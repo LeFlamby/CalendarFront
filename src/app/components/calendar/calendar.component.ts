@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, signal, ChangeDetectorRef, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import {
   CalendarOptions,
   DateSelectArg,
@@ -22,6 +22,8 @@ export class CalendarComponent implements OnInit {
   currentEvents = signal<EventApi[]>([]);
   isDataFirstFetched: boolean = false;
 
+
+
   constructor(
     private api: ApiService,
     private calendarUtil: CalendarUtilService,
@@ -34,6 +36,7 @@ export class CalendarComponent implements OnInit {
     this.getUserId();
   }
 
+  
 
   setCalendar(): void {
     this.calendarOptions.set({
@@ -52,7 +55,6 @@ export class CalendarComponent implements OnInit {
       // selectMirror: true,
       timeZone:'Europe/Paris',
       selectLongPressDelay: 100,
-
 
     });
   }
@@ -85,16 +87,6 @@ export class CalendarComponent implements OnInit {
         });
         this.isDataFirstFetched = true;
       });
-  }
-
-  handleCalendarToggle() {
-    this.calendarVisible.update((bool) => !bool);
-  }
-
-  handleWeekendsToggle() {
-    this.calendarOptions.mutate((options) => {
-      options.weekends = !options.weekends;
-    });
   }
 
   handleDateSelect(selectInfo: DateSelectArg) {
@@ -158,6 +150,7 @@ export class CalendarComponent implements OnInit {
   handleEvents(events: EventApi[]) {
     this.currentEvents.set(events);
     this.changeDetector.detectChanges();
+
   }
 
   handleEventDrop(info: { event: EventApi; oldEvent: EventApi }) {
@@ -192,4 +185,6 @@ export class CalendarComponent implements OnInit {
   }
 }
 
+
 }
+

@@ -24,12 +24,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SidebarModule } from 'primeng/sidebar';
 
-
-
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
