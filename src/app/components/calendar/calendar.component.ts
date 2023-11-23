@@ -180,8 +180,7 @@ export class CalendarComponent implements OnInit {
     const userId = tokenData.id;
 
     return userId;
-  
-  
+
   }
 }
 

@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import frLocale from '@fullcalendar/core/locales/fr';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class CalendarUtilService {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+      right: 'dayGridMonth,timeGridWeek'  //,timeGridDay,listWeek'
     },
     initialView: 'dayGridMonth',
     weekends: true,
@@ -33,6 +34,20 @@ export class CalendarUtilService {
   };
 
   constructor() { }
+
+  private calendarOptionsSource = new BehaviorSubject<any>({});
+  calendarOptions$ = this.calendarOptionsSource.asObservable();
+
+  private changeViewSource = new BehaviorSubject<string>('');
+  changeView$ = this.changeViewSource.asObservable();
+
+  updateCalendarOptions(options: any) {
+    this.calendarOptionsSource.next(options);
+  }
+
+  triggerChangeView(view: string) {
+    this.changeViewSource.next(view);
+  }
 
 }
 
