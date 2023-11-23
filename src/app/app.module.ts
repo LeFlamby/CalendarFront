@@ -20,6 +20,10 @@ import { DividerModule } from 'primeng/divider';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { HeaderComponent } from './components/header/header.component';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { SidebarModule } from 'primeng/sidebar';
+
 
 
 
@@ -32,6 +36,7 @@ import { InputTextModule } from 'primeng/inputtext';
     LoginComponent,
     CalendarComponent,
     RegisterComponent,
+    HeaderComponent,
   
   ],
   imports: [
@@ -46,7 +51,9 @@ import { InputTextModule } from 'primeng/inputtext';
     BrowserAnimationsModule,
     ButtonModule,
     InputTextModule,
-    
+    TabMenuModule,
+    SidebarModule,
+
 
   ],
   providers: [

@@ -24,7 +24,7 @@ export class RegisterComponent {
           '', [Validators.required, Validators.minLength(3)]
         ),
         password: new FormControl(
-          '', [Validators.required, Validators.minLength(3)]
+          '', [Validators.required, Validators.minLength(8)]
         ),
         confirmPassword: new FormControl(
           '', [Validators.required]
