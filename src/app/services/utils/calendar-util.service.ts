@@ -11,6 +11,12 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 })
 export class CalendarUtilService {
 
+  private calendarOptionsSource = new BehaviorSubject<any>({});
+  calendarOptions$ = this.calendarOptionsSource.asObservable();
+
+  private changeViewSource = new BehaviorSubject<string>('');
+  changeView$ = this.changeViewSource.asObservable();
+
 
   calendarOptions = {
     plugins: [
@@ -35,11 +41,7 @@ export class CalendarUtilService {
 
   constructor() { }
 
-  private calendarOptionsSource = new BehaviorSubject<any>({});
-  calendarOptions$ = this.calendarOptionsSource.asObservable();
 
-  private changeViewSource = new BehaviorSubject<string>('');
-  changeView$ = this.changeViewSource.asObservable();
 
   updateCalendarOptions(options: any) {
     this.calendarOptionsSource.next(options);

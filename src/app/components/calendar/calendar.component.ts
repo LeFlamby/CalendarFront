@@ -27,26 +27,25 @@ export class CalendarComponent implements OnInit {
   constructor(
     private api: ApiService,
     private calendarUtil: CalendarUtilService,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
   ) { }
 
   ngOnInit(): void {
     this.setCalendar();
     this.getDatas();
     this.getUserId();
+
+    this.calendarUtil.changeView$.subscribe((view) => {
+      console.log(`Changing to view: ${view}`);
   }
 
+  );
+  }
   
 
   setCalendar(): void {
     this.calendarOptions.set({
       ...this.calendarUtil.calendarOptions,
-      initialView: 'dayGridMonth',
-      headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridDay',
-      },
       select: this.handleDateSelect.bind(this),
       eventClick: this.handleEventClick.bind(this),
       eventsSet: this.handleEvents.bind(this),
@@ -180,7 +179,6 @@ export class CalendarComponent implements OnInit {
     const userId = tokenData.id;
 
     return userId;
-
   }
 }
 
