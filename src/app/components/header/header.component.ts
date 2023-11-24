@@ -20,8 +20,8 @@ ngOnInit() {
     this.items = [
       { icon: 'pi pi-fw pi-calendar', routerLink: ['/calendar'], styleClass: 'calendar', label: 'Calendrier' },
       { icon: 'pi pi-fw pi-pencil', routerLink: ['/edit'], styleClass: 'edit', label: 'Notes' }, 
-      { label: 'Mois', command: () => this.changeView('dayGridMonth', options) },
-      { label: 'Semaine', command: () => this.changeView('timeGridWeek', options) },
+      { icon: 'pi pi-calendar-plus', class: " ptooltip p-highlight", label: 'Mois', command: () => this.changeView('dayGridMonth', options) },
+      { icon: 'pi pi-calendar-minus ',label: 'Semaine', command: () => this.changeView('timeGridWeek', options) },
       {
         label: 'Menu',
         command: () => this.toggleSidebar(),
