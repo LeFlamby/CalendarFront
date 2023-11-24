@@ -11,6 +11,7 @@ import { CalendarUtilService } from 'src/app/services/utils/calendar-util.servic
 export class HeaderComponent {
 items: MenuItem[]|undefined;
 sidebarVisible : boolean = false;
+MenuItems: MenuItem[]|undefined;
 
 ngOnInit() {
   
@@ -21,10 +22,23 @@ ngOnInit() {
       { icon: 'pi pi-fw pi-pencil', routerLink: ['/edit'], styleClass: 'edit', label: 'Notes' }, 
       { label: 'Mois', command: () => this.changeView('dayGridMonth', options) },
       { label: 'Semaine', command: () => this.changeView('timeGridWeek', options) },
+      {
+        label: 'Menu',
+        command: () => this.toggleSidebar(),
+        icon: 'pi pi-arrow-right',
+        styleClass: 'p-button-rounded p-button-text',
+        id: "right",
+      },
     ];
   });
 }
 
+
+
+
+toggleSidebar() {
+  this.sidebarVisible = !this.sidebarVisible;
+}
 constructor (private router: Router, private calendarUtil: CalendarUtilService) { 
   
 }

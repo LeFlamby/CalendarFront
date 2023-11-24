@@ -1,6 +1,28 @@
-:host ::ng-deep .p-tabmenu-nav {
-display: flex;
-    flex-direction:row-reverse;
+
+
+
+
+:host ::ng-deep .p-tabmenu-nav   {
+    display: flex;
+    flex-direction: row-reverse;
+    
+}
+
+:host ::ng-deep .p-tabmenu-nav #right{
+    position: fixed;
+    left: 0;
+   
+}   
+
+:host ::ng-deep .p-sidebar-left{
+    width: 12rem;
+ 
+    margin:0;
+}
+
+:host ::ng-deep .p-sidebar-header{
+    padding-top: 11px;
+    padding-bottom: 0;
 }
 
 @media screen and  (max-width: 700px) {
@@ -8,5 +30,11 @@ display: flex;
         display: none;
       }
 
-       
+      :host ::ng-deep .p-sidebar-left{
+        width: 12rem;
+        height: 60%;
+        margin:0;
+    }
+
+     
 }

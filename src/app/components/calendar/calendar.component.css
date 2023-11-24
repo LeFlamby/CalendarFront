@@ -39,6 +39,7 @@ h2 {
   .demo-app-main {
     flex-grow: 1;
     padding: 3em;
+    margin-top: 2em;
   }
   
   .fc { /* the calendar root */

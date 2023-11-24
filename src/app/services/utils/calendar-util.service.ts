@@ -30,11 +30,11 @@ export class CalendarUtilService {
       listPlugin,
     ],
     locale: frLocale,
-    // headerToolbar: {
-    //   left: 'prev,next today',
-    //   center: 'title',
-    //   right: 'dayGridMonth,timeGridWeek'  //,timeGridDay,listWeek'
-    // },
+    headerToolbar: {
+      left: 'prev',
+      center: 'title',
+       right: 'next'
+    },
     initialView: 'dayGridMonth',
     weekends: true,
     editable: true,

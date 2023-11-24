@@ -1,12 +1,36 @@
-<p-tabMenu [model]="items"></p-tabMenu>
-<p-button (click)="sidebarVisible = true" icon="pi pi-arrow-right" classStyle=""></p-button>
 
-<p-sidebar [(visible)]="sidebarVisible" >
-    <h3>Sidebar</h3>
-    <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </p>
+
+<div class="px-0 py-0 mx-0 my-0" >
+    <p-tabMenu [model]="items"></p-tabMenu>
+  </div>
+
+<p-sidebar [(visible)]="sidebarVisible"  class="w-15rem">
+
+    <div class="sidebar-menu">
+        <ul class="px-0  mx-auto list-none ">
+            <p-divider></p-divider>
+            <li><a href="index.html" class="no-underline text-blue-600 "><i class="pi pi-fw pi-home " ></i><span>  Profile</span></a></li>
+            <p-divider></p-divider>
+
+            <li><a href="forms.html" class="no-underline text-blue-600"><i class="pi pi-fw pi-pencil"></i><span>  Vos calendrier</span></a></li>
+            <p-divider></p-divider>
+
+            <li><a href="data.html" class="no-underline text-blue-600"><i class="pi pi-fw pi-table"></i><span>  CGU</span></a></li>
+            <p-divider></p-divider>
+
+            <li><a href="panels.html" class="no-underline text-blue-600"><i class="pi pi-fw pi-list"></i><span>  RGPD</span></a></li>
+            <p-divider></p-divider>
+
+            <li><a href="overlays.html" class="no-underline text-blue-600"><i class="pi pi-fw pi-clone"></i><span>  Contactez nous!</span></a></li>
+            <p-divider></p-divider>
+
+            <li><a href="menus.html" class="no-underline text-blue-600"><i class="pi pi-fw pi-plus"></i><span>  Paramètres</span></a></li>
+           
+        </ul>
+    </div>
+
+
+  
 </p-sidebar>
 
 

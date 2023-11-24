@@ -23,6 +23,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { HeaderComponent } from './components/header/header.component';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { SidebarModule } from 'primeng/sidebar';
+import { MenuModule } from 'primeng/menu';
+import { ToastModule } from 'primeng/toast';
+
 
 @NgModule({
   declarations: [
@@ -31,6 +34,7 @@ import { SidebarModule } from 'primeng/sidebar';
     CalendarComponent,
     RegisterComponent,
     HeaderComponent,
+    
   
   ],
   imports: [
@@ -47,7 +51,8 @@ import { SidebarModule } from 'primeng/sidebar';
     InputTextModule,
     TabMenuModule,
     SidebarModule,
-
+    MenuModule,
+ToastModule
 
   ],
   providers: [
